@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline - Thailand-Cambodia Conflict Monitor | Interactive Events Timeline</title>
+    <meta name="description" content="Interactive timeline showing key events and developments in the Thailand-Cambodia border conflict">
+    <meta name="keywords" content="Thailand, Cambodia, border conflict timeline, diplomatic events, ASEAN, Southeast Asia">
+    <meta name="author" content="Thailand-Cambodia Monitor">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sivniv.github.io/thailand-cambodia-monitor/timeline.html">
+    <meta property="og:title" content="Thailand-Cambodia Conflict Timeline">
+    <meta property="og:description" content="Interactive timeline showing key events and developments in the Thailand-Cambodia border conflict">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sivniv.github.io/thailand-cambodia-monitor/timeline.html">
+    <meta property="twitter:title" content="Thailand-Cambodia Conflict Timeline">
+    <meta property="twitter:description" content="Interactive timeline showing key events and developments in the Thailand-Cambodia border conflict">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-semibold text-gray-900 hover:text-gray-700">
+                        Thailand-Cambodia Conflict Monitor
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" 
+                       class="px-4 py-2 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 transition-colors">
+                        ← Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                Thailand-Cambodia Conflict Timeline
+            </h1>
+            <p class="text-gray-600">
+                Interactive timeline showing key events and developments in the Thailand-Cambodia border conflict
+            </p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-900">Timeline</h2>
+                <div class="flex items-center space-x-2">
+                    <select id="timePeriod" class="text-sm border border-gray-300 rounded-md px-2 py-1">
+                        <option value="day">Day</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between items-center mb-6">
+                <button id="prevBtn" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium transition-colors">
+                    ← Previous
+                </button>
+                <h3 id="dateRange" class="text-lg font-semibold text-gray-800">
+                    July 28, 2025
+                </h3>
+                <button id="nextBtn" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium transition-colors">
+                    Next →
+                </button>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button class="filter-btn active px-3 py-1 text-xs font-medium rounded-full transition-colors bg-blue-100 text-blue-800" data-filter="all">
+                    All Sources
+                </button>
+                <button class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200" data-filter="breaking">
+                    Breaking News
+                </button>
+                <button class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200" data-filter="government">
+                    Government
+                </button>
+                <button class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200" data-filter="rss">
+                    RSS
+                </button>
+                <button class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200" data-filter="thai">
+                    Thai
+                </button>
+                <button class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200" data-filter="cambodian">
+                    Cambodian
+                </button>
+            </div>
+
+            <!-- Timeline -->
+            <div class="relative">
+                <!-- Timeline line -->
+                <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-300 transform -translate-y-1/2"></div>
+                
+                <!-- Time markers -->
+                <div class="relative h-16 mb-4" id="timeMarkers">
+                    <!-- Time markers will be generated by JavaScript -->
+                </div>
+
+                <!-- Dots -->
+                <div class="relative h-12" id="timelineDots">
+                    <!-- Timeline dots will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="mt-6 flex justify-between text-sm text-gray-600" id="timelineStats">
+                <span>Total events: <span id="totalEvents">0</span></span>
+                <span>High priority: <span id="highPriorityEvents">0</span></span>
+                <span>Medium priority: <span id="mediumPriorityEvents">0</span></span>
+            </div>
+
+            <!-- Priority-sorted Events List -->
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Events (High to Low Priority)</h3>
+                <div class="space-y-3 max-h-96 overflow-y-auto" id="eventsList">
+                    <!-- Events will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for selected dot -->
+    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modalTitle" class="text-lg font-semibold text-gray-900"></h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="modalContent" class="space-y-2 text-sm text-gray-600">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Embedded timeline data
+        const timelineData = [
+            {
+                id: "event_001",
+                title: "Temple Dispute Escalation",
+                description: "Military buildup near Preah Vihear temple following diplomatic disagreements",
+                eventDate: "2025-07-28T10:30:00Z",
+                eventType: "military_activity",
+                importance: 4,
+                source: "Reuters"
+            },
+            {
+                id: "event_002", 
+                title: "ASEAN Diplomatic Intervention",
+                description: "Foreign ministers issue joint statement calling for peaceful resolution",
+                eventDate: "2025-07-28T14:15:00Z",
+                eventType: "diplomatic_activity",
+                importance: 3,
+                source: "Channel News Asia"
+            },
+            {
+                id: "event_003",
+                title: "Border Closure Economic Impact",
+                description: "Local communities face economic hardship due to border crossing closures",
+                eventDate: "2025-07-28T16:45:00Z", 
+                eventType: "economic_impact",
+                importance: 3,
+                source: "BBC News"
+            }
+        ];
+
+        // Global variables
+        let selectedDate = new Date('2025-07-28T00:00:00');
+        let selectedFilter = 'all';
+        let selectedTimePeriod = 'day';
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatDateRange() {
+            if (selectedTimePeriod === 'day') {
+                return selectedDate.toLocaleDateString('en-US', { 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+            } else if (selectedTimePeriod === 'week') {
+                const weekStart = new Date(selectedDate);
+                weekStart.setDate(selectedDate.getDate() - selectedDate.getDay());
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+                return `${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${weekEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+            } else {
+                return selectedDate.toLocaleDateString('en-US', { 
+                    month: 'long', 
+                    year: 'numeric' 
+                });
+            }
+        }
+
+        function getDotColor(importance) {
+            if (importance >= 4) return 'bg-red-500';
+            if (importance >= 3) return 'bg-blue-500';
+            return 'bg-gray-400';
+        }
+
+        function getDotSize(importance) {
+            if (importance >= 4) return 'w-4 h-4';
+            if (importance >= 3) return 'w-3 h-3';
+            return 'w-2 h-2';
+        }
+
+        function filterEvents() {
+            let filtered = timelineData.filter(event => {
+                const eventDate = new Date(event.eventDate);
+                
+                // Date filtering
+                const today = new Date(selectedDate);
+                if (selectedTimePeriod === 'day') {
+                    const startOfDay = new Date(today);
+                    startOfDay.setHours(0, 0, 0, 0);
+                    const endOfDay = new Date(today);
+                    endOfDay.setHours(23, 59, 59, 999);
+                    if (eventDate < startOfDay || eventDate > endOfDay) return false;
+                } else if (selectedTimePeriod === 'week') {
+                    const weekStart = new Date(today);
+                    weekStart.setDate(today.getDate() - today.getDay());
+                    weekStart.setHours(0, 0, 0, 0);
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 6);
+                    weekEnd.setHours(23, 59, 59, 999);
+                    if (eventDate < weekStart || eventDate > weekEnd) return false;
+                } else {
+                    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+                    const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+                    if (eventDate < monthStart || eventDate > monthEnd) return false;
+                }
+
+                // Source filtering
+                if (selectedFilter === 'all') return true;
+                if (selectedFilter === 'breaking') return event.importance >= 4;
+                if (selectedFilter === 'government') return event.source.toLowerCase().includes('government');
+                if (selectedFilter === 'rss') return event.eventType === 'news_article';
+                if (selectedFilter === 'social') return event.eventType === 'facebook_post';
+                if (selectedFilter === 'thai') return event.source.toLowerCase().includes('thai');
+                if (selectedFilter === 'cambodian') return event.source.toLowerCase().includes('cambodia');
+                return true;
+            });
+
+            return filtered;
+        }
+
+        function createDistributedDots(events) {
+            if (events.length === 0) return [];
+            
+            const sortedEvents = [...events].sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
+            
+            return sortedEvents.map((event, index) => {
+                let position;
+                if (sortedEvents.length === 1) {
+                    position = 50;
+                } else {
+                    const startPos = 10;
+                    const endPos = 90;
+                    const spacing = (endPos - startPos) / (sortedEvents.length - 1);
+                    position = startPos + (index * spacing);
+                }
+                
+                return { ...event, displayPosition: position };
+            });
+        }
+
+        function generateTimeMarkers() {
+            const container = document.getElementById('timeMarkers');
+            container.innerHTML = '';
+            
+            for (let i = 0; i <= 12; i++) {
+                const marker = document.createElement('div');
+                marker.className = 'absolute transform -translate-x-1/2';
+                marker.style.left = `${(i / 12) * 100}%`;
+                
+                const line = document.createElement('div');
+                line.className = 'w-px h-2 bg-gray-400 mb-1';
+                
+                const label = document.createElement('span');
+                label.className = 'text-xs text-gray-500 block text-center';
+                label.textContent = i === 0 ? '12 AM' : i === 12 ? '11:59 PM' : i < 12 ? `${i} AM` : `${i - 12} PM`;
+                
+                marker.appendChild(line);
+                marker.appendChild(label);
+                container.appendChild(marker);
+            }
+        }
+
+        function renderTimeline() {
+            const filteredEvents = filterEvents();
+            const distributedEvents = createDistributedDots(filteredEvents);
+            
+            // Update date range
+            document.getElementById('dateRange').textContent = formatDateRange();
+            
+            // Generate dots
+            const dotsContainer = document.getElementById('timelineDots');
+            dotsContainer.innerHTML = '';
+            
+            distributedEvents.forEach(event => {
+                const dotContainer = document.createElement('div');
+                dotContainer.className = 'absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer';
+                dotContainer.style.left = `${event.displayPosition}%`;
+                dotContainer.style.top = '50%';
+                
+                const dot = document.createElement('div');
+                dot.className = `${getDotColor(event.importance)} ${getDotSize(event.importance)} rounded-full hover:scale-110 transition-transform shadow-md`;
+                
+                dotContainer.appendChild(dot);
+                dotsContainer.appendChild(dotContainer);
+                
+                // Add click event
+                dotContainer.addEventListener('click', () => showModal(event));
+            });
+            
+            // Update stats
+            document.getElementById('totalEvents').textContent = distributedEvents.length;
+            document.getElementById('highPriorityEvents').textContent = distributedEvents.filter(e => e.importance >= 4).length;
+            document.getElementById('mediumPriorityEvents').textContent = distributedEvents.filter(e => e.importance >= 3 && e.importance < 4).length;
+            
+            // Update events list
+            renderEventsList(distributedEvents);
+        }
+
+        function renderEventsList(events) {
+            const container = document.getElementById('eventsList');
+            const sortedEvents = [...events].sort((a, b) => b.importance - a.importance);
+            
+            container.innerHTML = sortedEvents.map((event, index) => `
+                <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" onclick="showModal(${JSON.stringify(event).replace(/"/g, '&quot;')})">
+                    <div class="flex-shrink-0 flex items-center space-x-2">
+                        <span class="text-sm font-medium text-gray-500">#${index + 1}</span>
+                        <div class="${getDotColor(event.importance)} ${getDotSize(event.importance)} rounded-full"></div>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-sm font-medium text-gray-900 truncate">${event.title}</h4>
+                            <span class="text-xs text-gray-500 ml-2">${formatDate(event.eventDate)}</span>
+                        </div>
+                        <div class="flex items-center justify-between mt-1">
+                            <p class="text-xs text-gray-600">${event.source}</p>
+                            <span class="text-xs px-2 py-1 rounded-full ${
+                                event.importance >= 4 ? 'bg-red-100 text-red-800' :
+                                event.importance >= 3 ? 'bg-blue-100 text-blue-800' :
+                                'bg-gray-100 text-gray-800'
+                            }">Priority ${event.importance}</span>
+                        </div>
+                        ${event.description ? `<p class="text-xs text-gray-500 mt-1 line-clamp-2">${event.description}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showModal(event) {
+            document.getElementById('modalTitle').textContent = event.title;
+            document.getElementById('modalContent').innerHTML = `
+                <p><strong>Time:</strong> ${formatDate(event.eventDate)}</p>
+                <p><strong>Source:</strong> ${event.source}</p>
+                <p><strong>Priority:</strong> ${event.importance}/5</p>
+                ${event.description ? `<p><strong>Description:</strong> ${event.description}</p>` : ''}
+            `;
+            document.getElementById('eventModal').classList.remove('hidden');
+        }
+
+        function navigateDate(direction) {
+            const newDate = new Date(selectedDate);
+            if (selectedTimePeriod === 'day') {
+                newDate.setDate(selectedDate.getDate() + (direction === 'next' ? 1 : -1));
+            } else if (selectedTimePeriod === 'week') {
+                newDate.setDate(selectedDate.getDate() + (direction === 'next' ? 7 : -7));
+            } else {
+                newDate.setMonth(selectedDate.getMonth() + (direction === 'next' ? 1 : -1));
+            }
+            selectedDate = newDate;
+            renderTimeline();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            generateTimeMarkers();
+            renderTimeline();
+            
+            // Navigation buttons
+            document.getElementById('prevBtn').addEventListener('click', () => navigateDate('prev'));
+            document.getElementById('nextBtn').addEventListener('click', () => navigateDate('next'));
+            
+            // Time period selector
+            document.getElementById('timePeriod').addEventListener('change', function(e) {
+                selectedTimePeriod = e.target.value;
+                renderTimeline();
+            });
+            
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active state
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active', 'bg-blue-100', 'text-blue-800'));
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.add('bg-gray-100', 'text-gray-700'));
+                    
+                    this.classList.add('active', 'bg-blue-100', 'text-blue-800');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    
+                    selectedFilter = this.dataset.filter;
+                    renderTimeline();
+                });
+            });
+            
+            // Modal close
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('eventModal').classList.add('hidden');
+            });
+            
+            // Click outside modal to close
+            document.getElementById('eventModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+        });
+
+        // Make showModal available globally for onclick handlers
+        window.showModal = showModal;
+    </script>
+</body>
+</html>
